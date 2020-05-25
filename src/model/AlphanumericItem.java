@@ -5,30 +5,42 @@
  */
 package model;
 
+import control.Helper;
+
 /**
  *
  * @author MARCUS VINICIUS
  */
 public class AlphanumericItem implements Item{
-    private String alphanumeric_item=null;
+    StringBuilder sb=new StringBuilder();
     @Override
-    public boolean compare(Item item) {
-        boolean status=false;
+    public int compare(Item item) {
         if (item instanceof AlphanumericItem){
             AlphanumericItem tmp=(AlphanumericItem) item;
-            status=(alphanumeric_item.equalsIgnoreCase(tmp.alphanumeric_item) && item!=null) ? !status:  status;
-        }
-            return status;
+            int counter=0;
+            while(counter<tmp.sb.length() && counter<this.sb.length()){
+                int n=compareLetters(this.sb.charAt(counter), tmp.sb.charAt(counter));
+                if (n!=0) return n;
+                ++counter;
+            }
             
+            return sb.toString().compareTo(tmp.sb.toString());
+            
+        }
+        return -1;
     }
 
+    private int compareLetters(char a, char b){
+        return Character.compare(Character.toUpperCase(a), Character.toUpperCase(b));
+    }
+    
     @Override
     public String print() {
-        return this.alphanumeric_item;
+        return this.sb.toString();
     }
 
     @Override
     public void setItem(String item) {
-        this.alphanumeric_item=item;
+        sb=new StringBuilder(item);
     }
 }

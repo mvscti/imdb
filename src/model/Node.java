@@ -25,7 +25,7 @@ public class Node {
     }
     
     /**
-     * Infoma se existe o nó possui um próximo elemento
+     * Infoma se o nó possui um próximo elemento
      * @return True, se sim
      */
     public boolean hasNext(){
@@ -48,8 +48,27 @@ public class Node {
         return this.next;
     }
     
+    /**
+     * Retorna os dados referentes a um Node
+     * @return Array de Node
+     */
     public Item[] getNodeData(){
         return this.data;
+    }
+    
+    /**
+     * Retorna todos os Itens não chave
+     * @return array de Item
+     */
+    public Item[] getNonKeyData(){
+       if (this.keys.length==this.data.length) return getNodeData();
+       else{
+           Item[] tmp=new Item[this.data.length-this.keys.length];
+           for (int i=this.keys.length; i<this.data.length; i++){
+               tmp[i-this.keys.length]=this.data[i];
+           }
+           return tmp;    
+       }
     }
     
     /**
@@ -96,6 +115,17 @@ public class Node {
     }
     
     /**
+     * Retorna um Item na posição X 
+     * @param position posição a ser procurada
+     * @return Item
+     */
+    public Item getItemAt(int position){
+        if (position>=0 && position<this.data.length)
+            return this.data[position];
+        return null;
+    }
+    
+    /**
      * Sobrescreve método para verificar se o Node possui um outro equivalente
      * como chave primária
      * @param o Node 
@@ -104,12 +134,11 @@ public class Node {
     @Override
     public boolean equals(Object o){
         if (o instanceof Node){
-            Node e=(Node) o;
             Item[] items=((Node) o).getKeys();
             int count=0; //contador do laço de repetição do array de itens chave
             int equalNumber=0; //contador de ocorrências em que um item procurado é igual a uma chave
             for (Item i: getKeys()){
-               if (i.compare(items[count])) ++equalNumber;
+               if (i.compare(items[count])==0) ++equalNumber;
                ++count;
             }
             //Todas as colunas chave são idênticas

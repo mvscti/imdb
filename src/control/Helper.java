@@ -5,8 +5,6 @@
  */
 package control;
 
-import java.text.DecimalFormatSymbols;
-
 /**
  * Classe utilitária para o projeto
  * @author MARCUS VINICIUS
@@ -22,6 +20,13 @@ public class Helper {
         return str.matches("-?\\d+(\\.\\d+)?"); 
 
     }
+   
+    public static int hashCode(Double o){
+        int h = (o.hashCode() & 0x7fffffff);
+        h= h^ (h << 11);
+        if (h<0) h=h*-1;
+        return h;
+    }
     
     /**
      * Converte uma String em um número correspondente, juntando dois
@@ -30,20 +35,8 @@ public class Helper {
      * @return 
      */
     public static int convertStringToIndex(String v){
-        byte[] bytes=v.toLowerCase().getBytes(); //converte a String em código ASCII correspondente
-        int count_shift=0; //contador de rotações à esquerda
-        byte sum;
-        if (bytes.length>0) sum=bytes[0];
-        else return -1;
-        for (int i=1; i<bytes.length;i++){
-            if (i%2!=0)
-                ++count_shift;
-            if (i+1<bytes.length){
-                int tmp=bytes[i+1]<<count_shift;
-                sum+=tmp;
-                if (sum<0) sum*=-1;
-            }
-        }
-        return sum;
+            int k=v.hashCode() & 0x7fffffff;
+            if (k<0) k*=-1;
+            return k;
     }
 }

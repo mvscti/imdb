@@ -11,6 +11,6 @@ package model;
  */
 public interface Item {
     public void setItem(String item);
-    public boolean compare(Item item);
+    public int compare(Item item);
     public String print();
 }

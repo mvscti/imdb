@@ -4,18 +4,19 @@
  * and open the template in the editor.
  */
 package view;
-
+import control.DatabaseController;
 /**
  *
  * @author MARCUS VINICIUS
  */
-public class AboutFrame extends javax.swing.JFrame {
+public class PerformCountAggregationScreen extends javax.swing.JFrame {
 
     /**
-     * Creates new form AboutFrame
+     * Creates new form PerformCountAggregationScreen
      */
-    public AboutFrame() {
+    public PerformCountAggregationScreen() {
         initComponents();
+        
     }
 
     /**
@@ -27,22 +28,22 @@ public class AboutFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableResult = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("About");
+        setTitle("Perform Count Aggregation Operation from any existing Tables");
 
-        jLabel1.setText("This software was developed by the student Marcus Vinícius Souza Costa");
-
-        jLabel2.setText("as part of the evaluation of the Algorithms and Data Structures discipline");
-
-        jLabel3.setText("taught by the professor Dr. Jairo Francisco de Souza in the Master's Degree");
-
-        jLabel4.setText("in Computer Science of the UFJF (PGCC) - Juiz de Fora - MG. Brazil. 2017");
+        DatabaseController dc= new DatabaseController();
+        tableResult.setModel(new javax.swing.table.DefaultTableModel(
+            dc.getTotalOfRowsByTable(),
+            new String [] {
+                "Table name", "Total of Rows", "Number of Collisions"
+            }
+        ));
+        jScrollPane1.setViewportView(tableResult);
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/ok.png"))); // NOI18N
         jButton1.setText("Ok");
@@ -52,36 +53,33 @@ public class AboutFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("SELECT COUNT(*) FROM  tablename");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(86, 86, 86)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(172, 172, 172)
+                        .addGap(76, 76, 76)
                         .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -93,12 +91,11 @@ public class AboutFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tableResult;
     // End of variables declaration//GEN-END:variables
 }

@@ -47,10 +47,10 @@ public class Database {
     }
     
     /**
-     * Retotna o número de tabelas da Base de dados
+     * Retorna o número de tabelas da Base de dados
      * @return Número de tabelas
      */
-    public int getNumerOfTables(){
+    public int getNumberOfTables(){
         return this.nTables;
     }
     
@@ -72,8 +72,7 @@ public class Database {
     private int createKey(String value){
         //Índice numérico
         if (Helper.isStringNumeric(value)){
-            Integer valueNumeric=Integer.parseInt(value);
-            return valueNumeric;
+            return Helper.hashCode(Double.parseDouble(value));
         }
         //Índice alfanumérico
         else{
@@ -96,6 +95,31 @@ public class Database {
             }
         }
         return null;
+    }
+    
+    
+    //Retorna todas as tabelas de um banco de dados
+    public Table[] getTables(){
+        Table[] tables=new Table[getNumberOfTables()];
+        int count=0;
+        //O(n)
+        for (int i=0; i<TSIZE && count<getNumberOfTables(); i++){
+            if (this.hashTable[i]!=null){
+                tables[count]=this.hashTable[i];
+                Table aux=this.hashTable[i].getNext();
+                ++count;
+                // |Li|
+                while(aux!=null){
+                    tables[count]=aux;
+                    ++count;
+                    aux=aux.getNext();
+                    
+                }
+            }
+        }
+        
+        
+        return tables;
     }
     
     /**

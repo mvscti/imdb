@@ -25,6 +25,8 @@ public final class ReadSQLFileController {
     private static boolean flagCreateTable=false;
     private static boolean flagInserData=false;
     private static String tableName="";
+    private static String auxTableName="";
+    private static String joinTablesName="";
     private static final Database DATABASE=new Database("usda");
     private static String columnsName="";
     private static String data="";
@@ -32,7 +34,6 @@ public final class ReadSQLFileController {
    
     private ReadSQLFileController(String sqlFilePath) throws IOException{
         try{
-            
             String extension=sqlFilePath.substring(sqlFilePath.lastIndexOf(".") + 1);            
             if (!extension.equalsIgnoreCase("sql")){
                 javax.swing.JOptionPane.showMessageDialog(null,"Failed load data. The file must be a SQL script","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -69,21 +70,24 @@ public final class ReadSQLFileController {
                     if (t!=null) DATABASE.addTable(t);
                 }
                 
-                 //---------------- Verificação de PRIMARY KEYS-------------
+                 //---------------- Verificação de PRIMARY KEYS e FOREIGN KEYS-------------
                  CharSequence cs3 = "ALTER TABLE";
                  if (str.toUpperCase().contains(cs3)){
                      String[] tmp=str.split(" ");
                      tableName=(tmp.length>1)? tmp[tmp.length-1]: "";
                  }
                  CharSequence cs4 = "PRIMARY KEY";
+                 CharSequence cs5 = "FOREIGN KEY";
+                 CharSequence analyze = "ANALYZE;";
                  if (str.toUpperCase().contains(cs4)){
-                     String[] tmp;
-                     tmp=str.split(Pattern.quote("("));
-                     tmp=str.split(Pattern.quote("("));
-                     if (tmp.length>=2) tmp=tmp[1].split(Pattern.quote(")"));
-                     if (tmp.length>=1) tmp=tmp[0].split(Pattern.quote(","));
-                     setTablePrimaryKeys(tableName, tmp);
-                 }     
+                    String[] aux;
+                     aux=str.split(Pattern.quote("("));
+                     if (aux.length>=2) aux=aux[1].split(Pattern.quote(")"));
+                     if (aux.length>=1) aux=aux[0].split(Pattern.quote(","));
+                     setTablePrimaryKeys(tableName, aux); 
+                }else if (str.toUpperCase().contains(cs5) ||  (str.toUpperCase().contains(analyze))){ //FOREIGN KEY
+                     setTableForeignKey(str);
+                }
             }
             end = System.currentTimeMillis(); 
             difference = end - init; 
@@ -148,7 +152,7 @@ public final class ReadSQLFileController {
             String[] tableNameArray=tableName.toLowerCase().split(" ");//Quebra a srtirng CREATE TABLE
             table=new Table(tableNameArray[2].trim().replaceAll("\\s+$", ""), colums); //Pega o índice que contém o nome da tabela
             columnsName="";
-            ReadSQLFileController.tableName=null;
+            ReadSQLFileController.tableName="";
             flagCreateTable=!flagCreateTable;
         }
         return table;
@@ -235,6 +239,14 @@ public final class ReadSQLFileController {
     }
     
     /**
+     * Retorna a referência de uma tabela
+     * @return Instância da base de dados
+     */
+    public static Database getDatabase(){
+        return DATABASE;
+    }
+    
+    /**
      * Define quais são as chaves primárias de uma tabela
      * @param tablename nome da tabela
      * @param columnsIndexes nomes das chaves primárias
@@ -248,6 +260,40 @@ public final class ReadSQLFileController {
                 t.setIndexes(columns);
             }
             
+        }
+    }
+    
+    
+    private void setTableForeignKey(String str){
+        String[] tmpString;
+        CharSequence cs1="ANALYZE;";
+        if (DATABASE!=null && (!(auxTableName.equals(tableName)) && (!auxTableName.equals(""))) || (str.toUpperCase().contains(cs1))){
+            tmpString= joinTablesName.split(",");
+            int size=0;
+            for (int i=0; i<tmpString.length; i++){
+                if (!tmpString[i].isEmpty()) ++size;
+            }
+            int counter=0;
+            Table t=findTableByName(auxTableName);
+            if (t!=null){
+                Table tmp=null;
+                Table joinTables[]=new Table[size];
+                for (int i=0; i<tmpString.length; i++){
+                    tmp=findTableByName(tmpString[i]);
+                    if (tmp!=null){
+                        joinTables[counter]=tmp;
+                        ++counter;
+                    }
+                }
+                t.setJoinTables(joinTables);
+            }
+            joinTablesName="";        
+        }
+        if (!str.contains(cs1)){
+            tmpString=str.split(Pattern.quote("REFERENCES"));
+            if (tmpString.length>0) tmpString=tmpString[1].split(Pattern.quote("("));
+            if (tmpString.length>0)  joinTablesName+=tmpString[0].trim().replaceAll("\\s+$", "")+",";
+            auxTableName=tableName;
         }
     }
 }

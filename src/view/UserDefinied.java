@@ -14,6 +14,20 @@ import model.Table;
  */
 public class UserDefinied {
  
+    /**
+     * Exibe os menus disponíveis
+     */
+    public void showMainMenu(){
+        System.out.println("Operations allowed");
+        System.out.println("1-Insert data in some table");
+        System.out.println("2-Delete row from table");
+        System.out.println("3-Select data");
+        System.out.println("4-Create a new table in Database");
+        System.out.println("5-Import a new Dump file (Overwriten any existing database)");
+        System.out.println();
+        System.out.print("Choose any operation: ");
+    }
+   
     public UserDefinied(){
         DatabaseController dbc= new DatabaseController();
         //Criando uma base de dados

@@ -10,16 +10,16 @@ package model;
  * @author MARCUS VINICIUS
  */
 public class NumericItem implements Item{
-
     private Double numeric_item=null;
     @Override
-    public boolean compare(Item item) {
-        boolean status=false;
+    public int compare(Item item) {
         if (item instanceof NumericItem){
             NumericItem tmp=(NumericItem) item;
-            status=(tmp.numeric_item.compareTo(this.numeric_item)==0 && item!=null) ? !status:  status;
+            if (item!=null && this.numeric_item>tmp.numeric_item) return 1;
+            else if (item!=null && this.numeric_item<tmp.numeric_item) return -1;
+            else return 0;
         }
-        return status;
+        return 1;
     }
 
     @Override
@@ -31,6 +31,4 @@ public class NumericItem implements Item{
     public void setItem(String item) {
         this.numeric_item= Double.parseDouble(item);
     }
-
-    
 }
