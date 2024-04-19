@@ -16,4 +16,4 @@ $ java –jar IMDB.jar “path/to/sql-file”
 ```
 
 ## Note
-I recomend choosing one of the ![dump sql files](https://www.postgresql.org/ftp/projects/pgFoundry/dbsamples/) to perfom the tests.
+I recomend choosing one of the [dump sql files](https://www.postgresql.org/ftp/projects/pgFoundry/dbsamples/) to perfom the tests.
